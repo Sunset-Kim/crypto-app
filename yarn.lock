@@ -9664,7 +9664,7 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   "version" "17.0.2"
 
-"react-query@^3.33.7":
+"react-query@^3.34.5":
   "integrity" "sha512-qk1hYo+y90LGY5W4kNEYT5yCk8gyL1fVTMoRZfzBTaSdaZWOcdvij36MmkhIqiPdXoEt5pBvX2ejokazwq8haw=="
   "resolved" "https://registry.npmjs.org/react-query/-/react-query-3.34.5.tgz"
   "version" "3.34.5"
