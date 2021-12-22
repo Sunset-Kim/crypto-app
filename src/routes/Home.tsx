@@ -5,6 +5,7 @@ import Loading from '../components/Loading';
 import CoinAPI, { CoinsResponse } from '../services/CoinAPI';
 import { Link } from 'react-router-dom';
 import getIcon from '../utils/getIcon';
+import { useQuery } from 'react-query';
 
 const Container = styled.div``;
 const Header = styled.div`
@@ -51,35 +52,16 @@ img {
 const Title = styled.h1``;
 
 const Home = () => {
-  const [data, setData] = useState<CoinsResponse[]>();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  
-
-  useEffect(() => {
-    try {
-      setLoading(true);
-      const CoinData = CoinAPI.getCoins().then(
-        response => setData(response)
-      ).catch(e => {
-        setError(true)
-      })
-    } catch (error) {
-      console.error('데이터 실패')
-    } finally {
-      setLoading(false);
-    }
-    
-    return () => {
-      
-    }
-  }, [])
-
+  const {
+    isLoading,
+    isError,
+    data,
+  } = useQuery(["list"], CoinAPI.getCoins)
 
   return (
     <BodyContainer >
       {
-        loading 
+        isLoading 
         ? <Loading /> 
         : <Container>
         <Header>
