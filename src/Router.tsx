@@ -11,8 +11,8 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/coin/:coinID" element={<Coin />}>
-          <Route path="Chart" element={<Chart />} />
-          <Route path="Price" element={<Price />} />
+          <Route path="chart" element={<Chart />} />
+          <Route path="price" element={<Price />} />
         </Route>
       </Routes>
     </BrowserRouter>
