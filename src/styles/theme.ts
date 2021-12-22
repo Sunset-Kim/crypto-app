@@ -14,13 +14,18 @@ const media:Media = {
   desktop: (...args: BackQuoteArgs) => undefined
 }
 
-const makeColor = (color: string): Color => {
+const makeColor = (color: string): Color => { 
+  
   return {
+    //@ts-ignore
     default: chroma(color),
+    //@ts-ignore
     dark: chroma(color).darken(2),
+    //@ts-ignore
     light: chroma(color).brighten(2)
   }
 }
+
 
 
 Object.keys(sizes).reduce((acc,label) => {

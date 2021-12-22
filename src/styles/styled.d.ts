@@ -16,13 +16,16 @@ interface Media {
 }
 
 interface Color {
-  default: chroma.Color;
-  dark?: chroma.Color;
-  light?: chroma.Color
+  default: string;
+  dark?: string;
+  light?: string
 }
 
 interface Colors {
-  [key: string]: Color | string
+  primary: Color;
+  secondary: Color;
+  background: string
+  foreground: string
 }
 
 
