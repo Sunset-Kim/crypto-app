@@ -1,18 +1,20 @@
 import React,{useState, useEffect} from 'react'
 import styled from 'styled-components';
-import { useParams,useLocation, Outlet } from 'react-router'
-import { RouteProps,RouterProps } from 'react-router-dom';
+import { useParams,useLocation, Outlet, useMatch, useNavigate } from 'react-router'
 import Loading from '../components/Loading';
 import BodyContainer from '../components/BodyContainer';
 import CoinAPI, { CoinDetail,CoinPrice } from '../services/CoinAPI';
 import axios from 'axios';
 import getIcon from '../utils/getIcon';
-
+import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
 
 const Header = styled.div`
+display: flex;
 margin-bottom: 24px;
 
 h1 {
+  flex: 1;
   font-size: 32px;
   font-weight: bold;
   text-align: center;
@@ -71,7 +73,24 @@ h2 {
 `;
 
 const PriceInfoBox = styled(InfoBox)`
+`;
 
+const Tabs = styled.div`
+display: flex; 
+`
+
+const Tab = styled(Link)<{isactive: boolean}>`
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 20px 20px 0 0;
+  color: ${({theme}) => theme.color.background};
+  background-color: ${({theme,isactive}) => isactive ? theme.color.primary.default : theme.color.foreground};
+  transition: background-color .2s ease-in-out;
+  flex: 1;
+`
+
+const TabContainer = styled.div`
+  padding: 16px;
 `;
 
 
@@ -89,43 +108,40 @@ const Coin: React.FC = () => {
   // hook
   const {state} = useLocation() as RouterStates;
   const {coinID} = useParams() as CoinParam;
+  const priceMatch = useMatch('/coin/:coinID/price');
+  const chartMatch = useMatch('/coin/:coinID/chart');
+  const navigate = useNavigate();
 
-  // state
-  const [loading, setLoading] = useState(true);
-  const [info, setInfo] = useState<CoinDetail|undefined>();
-  const [price, setPrice] = useState<CoinPrice | undefined>();
-  
-  
-  useEffect(() => {
+  const {
+    isLoading: infoLoading,
+    isError: infoError,
+    data: info,
+  } = useQuery(["info", coinID], () => CoinAPI.getCoinDetail(coinID));
 
-    
-    try {
-      //@ts-ignore
-      axios.all([CoinAPI.getCoinDetail(coinID), CoinAPI.getPrice(coinID)])
-      .then(axios.spread((infoResp, priceResp) => {
-        setInfo(infoResp)
-        //@ts-ignore
-        setPrice(priceResp)
-        setLoading(false)
-      }))
-    } catch (e) {
-      console.log(e);
-    }
 
-    return () => {
-      
-    }
-  }, [coinID])
+  const {
+    isLoading: priceLoading,
+    isError: priceError,
+    data: price,
+  } = useQuery(["price", coinID], () => CoinAPI.getPrice(coinID));
+
+ const isLoading = infoLoading || priceLoading;
+ const isError = infoError || priceError;  
+
 
   return (
     <BodyContainer>
       <Header>
+        <button onClick={() => navigate("/")}>
+          back
+        </button>
         <h1>
-          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+          {state?.name ? state.name : isLoading ? "Loading..." : info?.name}
         </h1>
+      
       </Header>
       <Container>
-        {loading ? <Loading /> : <>
+        {isLoading ? <Loading /> : <>
         <InfoBox>
           <div>
             <h3>Rank</h3>
@@ -175,7 +191,14 @@ const Coin: React.FC = () => {
 
         </PriceInfoBox>
 
-        <Outlet />
+        <Tabs>
+        <Tab isactive={chartMatch !== null} to={`chart`}>Chart</Tab>
+        <Tab isactive={priceMatch !== null} to={`price`}>Price</Tab>
+        </Tabs>
+        
+        <TabContainer>
+          <Outlet />
+        </TabContainer>
         </>}
       </Container>
     </BodyContainer>
