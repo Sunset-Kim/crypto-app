@@ -21,7 +21,7 @@ body {
 
 #root {
   height: 100%;
-  max-width: 1024px;
+  max-width: 720px;
   min-width: 320px;
   margin: 0 auto;
 }
