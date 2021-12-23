@@ -1,13 +1,14 @@
-import React,{useState, useEffect} from 'react'
+import React from 'react'
 import styled from 'styled-components';
 import { useParams,useLocation, Outlet, useMatch, useNavigate } from 'react-router'
 import Loading from '../components/Loading';
 import BodyContainer from '../components/BodyContainer';
-import CoinAPI, { CoinDetail,CoinPrice } from '../services/CoinAPI';
-import axios from 'axios';
+import CoinAPI from '../services/CoinAPI';
 import getIcon from '../utils/getIcon';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import {Helmet} from 'react-helmet';
+
 
 const Header = styled.div`
 display: flex;
@@ -131,6 +132,11 @@ const Coin: React.FC = () => {
 
   return (
     <BodyContainer>
+      <Helmet>
+        <title>
+        {state?.name ? state.name : isLoading ? "Loading..." : info?.name}
+        </title>
+      </Helmet>
       <Header>
         <button onClick={() => navigate("/")}>
           back
