@@ -112,13 +112,12 @@ const Home = () => {
     isError,
     data,
   } = useQuery(["list"], CoinAPI.getCoins)
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [viewCounter, setViewCounter] = useState(10);
 
   // computed var
   const filteredData = data?.filter(item => item.is_active);
-  const isLoading = dataLoading && loading;
+  const isLoading = dataLoading;
   const totalPage =filteredData && Math.floor(filteredData.length / viewCounter);
 
   // handler
@@ -127,6 +126,7 @@ const Home = () => {
     setViewCounter(Number(newValue));
     setPage(1);
   }
+  
   const onChangePage = (e:React.FormEvent<HTMLInputElement>) => {
     const useInput = Number(e.currentTarget.value);
     let currentPage = page;
@@ -163,9 +163,7 @@ const Home = () => {
   return (
     <BodyContainer >
       {
-        isLoading 
-        ? <Loading /> 
-        : <Container>
+      <Container>
 
         {/* 헤더 */}
         <Header>
@@ -174,7 +172,9 @@ const Home = () => {
           </h1>
         </Header>
 
-        {/* 컨트롤 박스 */}
+        {
+          isLoading ? <Loading /> : <>
+          {/* 컨트롤 박스 */}
         <ControlBox>
           <select name="" id="" onChange={onChangeView} value={viewCounter}>
             <option value="10">10개씩 보기</option>
@@ -215,6 +215,11 @@ const Home = () => {
           </Coin>)
         }
         </CoinList>
+          
+          </>
+        }
+
+        
 
       </Container>
       }
