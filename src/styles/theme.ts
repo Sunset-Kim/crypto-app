@@ -26,22 +26,23 @@ const makeColor = (color: string): Color => {
   }
 }
 
-
-
 Object.keys(sizes).reduce((acc,label) => {
   switch(label) {
     case 'mobile' :
-      acc.mobile = (...args) => css`@media screen and (min-width: ${sizes.mobile}px){
+      acc.mobile = (...args) => css`
+      @media screen and (min-width: ${sizes.mobile}px){
         ${args}
       }`
     break;
     case 'tablet' :
-    acc.tablet = (...args) => css`@media screen and (min-width: ${sizes.tablet}px){
+    acc.tablet = (...args) => css`
+    @media screen and (min-width: ${sizes.tablet}px){
       ${args}
     }`
     break;
     case 'desktop' :
-    acc.desktop = (...args) => css`@media screen and (min-width: ${sizes.desktop}px){
+    acc.desktop = (...args) => css`
+    @media screen and (min-width: ${sizes.desktop}px){
       ${args}
     }`
     break;  
@@ -55,7 +56,7 @@ export const lightTheme: DefaultTheme = {
   borderRadius: '4px',
   media,
   color: {
-    primary: makeColor('#313131'),
+    primary: makeColor('#9b59b6'),
     secondary: makeColor('#313131'),
     background: "#222f3e",
     foreground: "#f5f6fa"

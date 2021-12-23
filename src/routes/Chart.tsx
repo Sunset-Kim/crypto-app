@@ -6,7 +6,11 @@ import CoinAPI from '../services/CoinAPI';
 import Loading from '../components/Loading';
 import ApexCharts from 'react-apexcharts';
 
-const Container = styled.div``;
+const Container = styled.div`
+padding: 16px 8px;
+border: 1px solid ${({theme}) => theme.color.primary.default};
+border-top: none;
+`;
 
 interface CoinParam {
   coinID : string
@@ -26,8 +30,8 @@ const Chart = () => {
 
   
   return (
-    <>
-      <h1>Chart</h1>
+    <Container>
+      
       {
         isLoading 
         ? <Loading /> 
@@ -50,8 +54,8 @@ const Chart = () => {
             zoom: {
               enabled: false
             },
-            height: 500,
-            width: 500,
+            height: '100%',
+            width: '100%',
             background: 'transparent'
           },
           // 캔들스틱 스타일 관련
@@ -119,7 +123,7 @@ const Chart = () => {
         />
       }
       
-    </>
+    </Container>
   )
 }
 

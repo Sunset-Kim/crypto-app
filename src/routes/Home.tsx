@@ -6,6 +6,9 @@ import CoinAPI from '../services/CoinAPI';
 import { Link } from 'react-router-dom';
 import getIcon from '../utils/getIcon';
 import { useQuery } from 'react-query';
+import Button from '../components/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretLeft,faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 // styled components
 const Container = styled.div``;
@@ -22,21 +25,51 @@ h1 {
 `;
 
 // controlbox
-const ControlBox  = styled.div``;
-const Pagenation = styled.div`
+const ControlBox  = styled.div`
+padding: 0 16px;
 display: flex;
-align-items: center;
+justify-content: space-between;
+margin-bottom: 16px;
+flex-direction: column;
+
+select {
+  padding: 8px 16px;
+  margin-bottom: 10px;
+}
+
+${({theme: {media}}) => media.tablet`
+flex-direction: row;
+select {
+  margin-bottom: 0;
+}
+`}
+
+
 `;
-const Page = styled.button`
-display: inline-flex;
-justify-content: center;
-align-items: center;
-border-radius: 5px;
-background-color: ${({theme}) => theme.color.foreground};
-color: ${({theme}) => theme.color.primary.default};
-width: 36px;
-height: 36px;
+
+const Pagenation = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > div {
+    margin: 0 16px;
+    height: 100%;
+  }
+
+  input {
+    width: 36px;
+    height: 100%;
+    margin-right: 10px;
+    text-align: center;
+    &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0
+    }
+  }
 `;
+
+
 
 // List
 const CoinList = styled.ul`
@@ -50,6 +83,7 @@ background-color: ${({theme}) => theme.color.foreground};
 color: ${({theme}) => theme.color.background};
 font-weight: bold;
 border-radius: 10px;
+overflow: hidden;
 
 a {
   display: flex;
@@ -147,12 +181,21 @@ const Home = () => {
             <option value="20">20개씩 보기</option>
             <option value="50">50개씩 보기</option>
           </select>
+
           <Pagenation>
-            <Page onClick={decresePage}>prev</Page>
-            <input type="number" value={page} onChange={onChangePage} max={totalPage} />/
-            <span>{totalPage}</span>
-            <Page onClick={incresePage}>next</Page>
+            <Button onClick={decresePage}>
+              <FontAwesomeIcon icon={faCaretLeft} />
+            </Button>
+            <div>
+              <input type="number" value={page} onChange={onChangePage} max={totalPage} />/
+              <span>{totalPage}</span>
+            </div>
+            
+            <Button onClick={incresePage}>
+              <FontAwesomeIcon icon={faCaretRight} />
+            </Button>
           </Pagenation>
+
         </ControlBox>
 
         {/* 리스트 */}

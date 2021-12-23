@@ -11,6 +11,7 @@ import {Helmet} from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltLeft, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../components/Modal';
+import Button from '../components/Button';
 
 
 const Header = styled.div`
@@ -25,27 +26,6 @@ h1 {
 }
 `;
 
-const PrevButton = styled.button`
-background: none;
-width: 36px;
-height: 36px;
-display: flex;
-justify-content: center;
-align-items: center;
-color: ${({theme}) => theme.color.foreground};
-font-size: 24px;
-border: 1px solid ${({theme}) => theme.color.foreground};
-background-color: none;
-transition: background-color 0.3s ease-in-out, color .3s ease-in-out;
-
-&:hover {
-  color: ${({theme}) => theme.color.background};
-  background-color: ${({theme}) => theme.color.foreground};
-}
-`;
-
-const RefreshButton = styled(PrevButton)``;
-
 const Container = styled.div``;
 
 const InfoBox = styled.div`
@@ -54,6 +34,7 @@ color: ${({theme}) => theme.color.background};
 background: ${({theme}) => theme.color.foreground};
 border-radius: 10px;
 margin-bottom: 24px;
+white-space: pre-wrap;
 
 > div {
   padding: 16px;
@@ -64,7 +45,9 @@ margin-bottom: 24px;
   align-items: center;
   
   h3 {
+    text-align: center;
     font-size: 18px;
+    line-height: 24px;
     font-weight: bold;
     text-transform: uppercase;
     margin-bottom: 8px;
@@ -115,7 +98,8 @@ const Tab = styled(Link)<{$isactive: boolean}>`
 `
 
 const TabContainer = styled.div`
-  padding: 16px;
+  
+  
 `;
 
 
@@ -164,7 +148,6 @@ const Coin: React.FC = () => {
     })    
   }
  }
- 
 
 
   return (
@@ -175,15 +158,15 @@ const Coin: React.FC = () => {
         </title>
       </Helmet>
       <Header>
-        <PrevButton onClick={() => navigate("/")}>
+        <Button onClick={() => navigate("/")}>
           <FontAwesomeIcon icon={faLongArrowAltLeft} />
-        </PrevButton>
+        </Button>
         <h1>
           {state?.name ? state.name : isLoading ? "Loading..." : info?.name}
         </h1>
-        <RefreshButton onClick={onRefresh}>
+        <Button onClick={onRefresh}>
           <FontAwesomeIcon icon={faUndoAlt} />
-        </RefreshButton>
+        </Button>
       
       </Header>
       <Container>
@@ -224,14 +207,20 @@ const Coin: React.FC = () => {
           <div>
             <h3>All Time High Price</h3>
             <div>
-              {price?.quotes.USD.ath_price}$
+              <p>
+                ${price?.quotes.USD.ath_price.toFixed(2)}
+              </p>
+              
             </div>
           </div>
 
           <div>
             <h3>Current Price</h3>
             <div>
-            {price?.quotes.USD.price}$
+              <p>
+              ${price?.quotes.USD.price.toFixed(2)}
+              </p>
+            
             </div>
           </div>
 

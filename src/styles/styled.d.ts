@@ -1,5 +1,6 @@
 import chroma from "chroma-js";
 import styled, { CSSProp } from "styled-components";
+import { TemplateLiteral } from "typescript";
 
 interface Sizes  {
   mobile: number
@@ -7,7 +8,7 @@ interface Sizes  {
   desktop: number
 }
 
-type BackQuoteArgs = string[]
+type BackQuoteArgs = [TemplateStringsArray];
 
 interface Media {
   mobile: (...args: BackQuoteArgs) => CSSProp | undefined

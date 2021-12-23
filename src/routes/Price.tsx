@@ -5,6 +5,13 @@ import { CoinPrice } from '../services/CoinAPI';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
+const Container = styled.div`
+padding: 16px 8px;
+border: 1px solid ${({theme}) => theme.color.primary.default};
+border-top: none;
+`;
+
 const OverViewBox = styled.div`
 display: flex;
 width: 100%;
@@ -16,6 +23,7 @@ justify-content: space-between;
 margin-bottom: 8px;
 h3 {
   text-transform: capitalize;
+  font-weight: bold;
 }
 `;
 
@@ -34,7 +42,7 @@ const Price = () => {
   const USDData = Object.entries(data.quotes.USD);
   
   return (
-    <div>
+    <Container>
       {USDData.map(item => <OverViewBox key={item[0]}>
         <h3>
           {item[0].replaceAll('_', ' ')}
@@ -64,7 +72,7 @@ const Price = () => {
               // 2nd add price $
               (item[0].indexOf('price') > -1 ? 
               <span>
-                {'$'+item[1]}
+                {'$'+Number(item[1]).toFixed(2)}
               </span> : 
               <span>
                 {item[1]} 
@@ -75,7 +83,7 @@ const Price = () => {
         </Value>
       </OverViewBox>)}
       
-    </div>
+    </Container>
   )
 }
 
