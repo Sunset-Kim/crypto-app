@@ -199,7 +199,9 @@ const Coin: React.FC = () => {
 
         <Tabs>
         <Tab $isactive={chartMatch !== null ? true : false } to={`chart`}>Chart</Tab>
-        <Tab $isactive={priceMatch !== null ? true : false} to={`price`}>Price</Tab>
+        <Tab $isactive={priceMatch !== null ? true : false} to={`price`} state={{
+          data: price
+        }}>Price</Tab>
         </Tabs>
         
         <TabContainer>
