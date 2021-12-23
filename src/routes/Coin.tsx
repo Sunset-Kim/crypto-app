@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import styled from 'styled-components';
 import { useParams,useLocation, Outlet, useMatch, useNavigate } from 'react-router'
 import Loading from '../components/Loading';
@@ -8,6 +8,9 @@ import getIcon from '../utils/getIcon';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {Helmet} from 'react-helmet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLongArrowAltLeft, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
+import Modal from '../components/Modal';
 
 
 const Header = styled.div`
@@ -21,6 +24,27 @@ h1 {
   text-align: center;
 }
 `;
+
+const PrevButton = styled.button`
+background: none;
+width: 36px;
+height: 36px;
+display: flex;
+justify-content: center;
+align-items: center;
+color: ${({theme}) => theme.color.foreground};
+font-size: 24px;
+border: 1px solid ${({theme}) => theme.color.foreground};
+background-color: none;
+transition: background-color 0.3s ease-in-out, color .3s ease-in-out;
+
+&:hover {
+  color: ${({theme}) => theme.color.background};
+  background-color: ${({theme}) => theme.color.foreground};
+}
+`;
+
+const RefreshButton = styled(PrevButton)``;
 
 const Container = styled.div``;
 
@@ -112,7 +136,8 @@ const Coin: React.FC = () => {
   const priceMatch = useMatch('/coin/:coinID/price');
   const chartMatch = useMatch('/coin/:coinID/chart');
   const navigate = useNavigate();
-
+  
+  const [isOpen, setIsOpen] = useState(false)
   const {
     isLoading: infoLoading,
     isError: infoError,
@@ -124,10 +149,22 @@ const Coin: React.FC = () => {
     isLoading: priceLoading,
     isError: priceError,
     data: price,
+    refetch
   } = useQuery(["price", coinID], () => CoinAPI.getPrice(coinID));
 
  const isLoading = infoLoading || priceLoading;
  const isError = infoError || priceError;  
+ const onRefresh = () => {
+  if(!isOpen) {
+    setIsOpen(true)
+    refetch().then(() => {
+      setTimeout(() => {
+        setIsOpen(false)
+      }, 300)
+    })    
+  }
+ }
+ 
 
 
   return (
@@ -138,12 +175,15 @@ const Coin: React.FC = () => {
         </title>
       </Helmet>
       <Header>
-        <button onClick={() => navigate("/")}>
-          back
-        </button>
+        <PrevButton onClick={() => navigate("/")}>
+          <FontAwesomeIcon icon={faLongArrowAltLeft} />
+        </PrevButton>
         <h1>
           {state?.name ? state.name : isLoading ? "Loading..." : info?.name}
         </h1>
+        <RefreshButton onClick={onRefresh}>
+          <FontAwesomeIcon icon={faUndoAlt} />
+        </RefreshButton>
       
       </Header>
       <Container>
@@ -209,6 +249,10 @@ const Coin: React.FC = () => {
         </TabContainer>
         </>}
       </Container>
+      {/* modal */}
+      <Modal isOpen={isOpen}>
+        Refetch 완료
+      </Modal>
     </BodyContainer>
   )
 }
