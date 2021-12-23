@@ -87,6 +87,17 @@ export interface CoinPrice {
   
 }
 
+export interface CoinHistory {  
+  time_open: string
+  time_close: string
+  open: number
+  high: number
+  low: number
+  close: number
+  volume: number
+  market_cap: number
+}
+
 const instance = axios.create({
   baseURL: "https://api.coinpaprika.com/v1/"
 })
@@ -95,6 +106,7 @@ interface API {
   getCoins: () => Promise<CoinsResponse[]>
   getCoinDetail: (id: string) => Promise<CoinDetail>,
   getPrice: (id: string) => Promise<CoinPrice>
+  getHistory: (id: string) => Promise<CoinHistory[]>
 }
 
 const CoinAPI: API = {
@@ -109,7 +121,18 @@ const CoinAPI: API = {
   getPrice: async (id: string) =>  {
     const result = await instance.get(`tickers/${id}`);
     return result.data
-  }  
+  },
+  getHistory: async (id: string) =>  {
+    const endDate = Math.floor(Date.now() / 1000);
+    const startDate = endDate - 60 * 60 * 24 * 7;
+    const result = await instance.get(`coins/${id}/ohlcv/historical`,{
+      params: {
+        start: startDate,
+        end: endDate
+      }
+    });
+    return result.data
+  }
 }
 
 export default CoinAPI
