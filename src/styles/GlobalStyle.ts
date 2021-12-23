@@ -31,6 +31,20 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* apex tool tip */
+.apexcharts-tooltip-candlestick {
+  padding: 1em;
+  font-family: 'Lato';
+
+  &-line {
+    margin-bottom: 0.2em;
+    span {
+      font-weight: bold;
+      margin-left: 0.5em;
+    }
+  }
+}
 `
 
 export default GlobalStyle;
