@@ -112,8 +112,6 @@ const Coin: React.FC = () => {
   const chartMatch = useMatch('/coin/:coinID/chart');
   const navigate = useNavigate();
 
-  console.log(priceMatch !== null)
-
   const {
     isLoading: infoLoading,
     isError: infoError,
