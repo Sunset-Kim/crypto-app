@@ -79,12 +79,12 @@ const Tabs = styled.div`
 display: flex; 
 `
 
-const Tab = styled(Link)<{isactive: boolean}>`
+const Tab = styled(Link)<{$isactive: boolean}>`
   padding: 10px 0;
   text-align: center;
   border-radius: 20px 20px 0 0;
   color: ${({theme}) => theme.color.background};
-  background-color: ${({theme,isactive}) => isactive ? theme.color.primary.default : theme.color.foreground};
+  background-color: ${({theme,$isactive}) => $isactive ? theme.color.primary.default : theme.color.foreground};
   transition: background-color .2s ease-in-out;
   flex: 1;
 `
@@ -111,6 +111,8 @@ const Coin: React.FC = () => {
   const priceMatch = useMatch('/coin/:coinID/price');
   const chartMatch = useMatch('/coin/:coinID/chart');
   const navigate = useNavigate();
+
+  console.log(priceMatch !== null)
 
   const {
     isLoading: infoLoading,
@@ -192,8 +194,8 @@ const Coin: React.FC = () => {
         </PriceInfoBox>
 
         <Tabs>
-        <Tab isactive={chartMatch !== null} to={`chart`}>Chart</Tab>
-        <Tab isactive={priceMatch !== null} to={`price`}>Price</Tab>
+        <Tab $isactive={chartMatch !== null ? true : false } to={`chart`}>Chart</Tab>
+        <Tab $isactive={priceMatch !== null ? true : false} to={`price`}>Price</Tab>
         </Tabs>
         
         <TabContainer>
