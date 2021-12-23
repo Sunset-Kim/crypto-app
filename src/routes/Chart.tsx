@@ -6,23 +6,6 @@ import CoinAPI from '../services/CoinAPI';
 import Loading from '../components/Loading';
 import ApexCharts from 'react-apexcharts';
 
-const data = {
-  options: {
-    chart: {
-      id: "basic-bar"
-    },
-    xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-    }
-  },
-  series: [
-    {
-      name: "series-1",
-      data: [30, 40, 45, 50, 49, 60, 70, 91]
-    }
-  ]
-}
-
 const Container = styled.div``;
 
 interface CoinParam {
@@ -30,9 +13,17 @@ interface CoinParam {
 }
 
 const Chart = () => {
-  const theme = useTheme();
+  
   const {coinID} = useParams() as CoinParam;
   const {isLoading,isError, data} = useQuery(["history", coinID], () => CoinAPI.getHistory(coinID));
+
+  const candleData = data?.map(price => {
+    return {
+      x: price.time_close,
+      y: [price.open, price.high, price.low, price.close],
+    }
+  })
+
   
   return (
     <>
@@ -40,56 +31,92 @@ const Chart = () => {
       {
         isLoading 
         ? <Loading /> 
-        : <ApexCharts type='line' 
-        series={[
-          {
-          name: "price",
-          data: data?.map(price => price.close)
-        },
-     
+        : <ApexCharts
+        type='candlestick'
+        series={[{
+          name: 'candle',
+          data: candleData,
+          
+        }
       ]}
+  
         options={{
-          theme: {
-            mode: 'dark'
-          },
+          // 차트 툴바, 줌 off, 차트 (사이즈, 배경색)
           chart: {
+            toolbar: {
+              autoSelected: 'pan',
+              show: false,
+            },
+            zoom: {
+              enabled: false
+            },
             height: 500,
             width: 500,
             background: 'transparent'
           },
-          stroke: {
-            curve: 'smooth',
-            width: 10
+          // 캔들스틱 스타일 관련
+          plotOptions: {
+            candlestick: {
+              colors: {
+
+              }
+            }
           },
+
+          title: {
+            text: `${coinID.toUpperCase()}`,
+            align: 'center',
+            style: {
+              fontSize: '18px',
+              fontWeight: 'bold',
+            }
+          },
+          theme: {
+            mode: 'dark'
+          },
+          
           xaxis: {
-            labels: {
-              show: false
-            },
-            axisTicks: {
-              show: false
-            },
             type: 'datetime',
-            categories: data?.map(price => price.time_close)
           },
           yaxis: {
-            show: false
-          },
-          fill: {
-            type: 'gradient',
-            gradient: {
-              gradientToColors: [`${theme.color.foreground}`],
-              stops: [0, 200]
+
+            labels: {
+              style: {
+                fontFamily: 'Lato'
+              },
+              formatter: (value) => `$ ${value.toFixed(2)}`
             }
           },
-          colors: [`${theme.color.primary.default}`],
+          
           tooltip: {
-            y: {
-              formatter: (value) => `$ ${value.toFixed(3)}`
-            }
-          }
+            fillSeriesColor: true,
+            custom: ({ seriesIndex, dataPointIndex, w }) => {
+              const o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
+              const h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
+              const l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
+              const c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
+
+              return (
+                `<div class="apexcharts-tooltip-candlestick">
+                <div class="apexcharts-tooltip-candlestick-line">Open:<span class="value">${Number(o).toFixed(2)}</span></div>
+                <div class="apexcharts-tooltip-candlestick-line">High: <span class="value">${Number(h).toFixed(2)}</span></div>
+                <div class="apexcharts-tooltip-candlestick-line">Low: <span class="value">${Number(l).toFixed(2)}</span></div>
+                <div class="apexcharts-tooltip-candlestick-line">Close: <span class="value">${Number(c).toFixed(2)}</span></div>
+                </div>`
+              )
+            },
+
+            style: {
+              fontFamily: 'Lato',
+              fontSize: '14px'
+            },
+            
+          },
           
           
-        }}/>
+        }}
+        
+        />
       }
       
     </>

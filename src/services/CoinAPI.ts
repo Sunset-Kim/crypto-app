@@ -124,7 +124,7 @@ const CoinAPI: API = {
   },
   getHistory: async (id: string) =>  {
     const endDate = Math.floor(Date.now() / 1000);
-    const startDate = endDate - 60 * 60 * 24 * 7;
+    const startDate = endDate - 60 * 60 * 24 * 14;
     const result = await instance.get(`coins/${id}/ohlcv/historical`,{
       params: {
         start: startDate,
