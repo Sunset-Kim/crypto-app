@@ -58,6 +58,19 @@ export const lightTheme: DefaultTheme = {
   color: {
     primary: makeColor('#9b59b6'),
     secondary: makeColor('#313131'),
+    background: "#f5f6fa",
+    foreground: "#222f3e"
+  },
+  typography: '2px'
+}
+
+export const darkTheme: DefaultTheme = {
+  sizes,
+  borderRadius: '4px',
+  media,
+  color: {
+    primary: makeColor('#9b59b6'),
+    secondary: makeColor('#313131'),
     background: "#222f3e",
     foreground: "#f5f6fa"
   },

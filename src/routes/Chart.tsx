@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom'
 import CoinAPI from '../services/CoinAPI';
 import Loading from '../components/Loading';
 import ApexCharts from 'react-apexcharts';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atom';
 
 const Container = styled.div`
 padding: 16px 8px;
@@ -17,7 +19,9 @@ interface CoinParam {
 }
 
 const Chart = () => {
-  
+  // recoil value
+  const isDark = useRecoilValue(isDarkAtom);
+  // hook
   const {coinID} = useParams() as CoinParam;
   const {isLoading,isError, data} = useQuery(["history", coinID], () => CoinAPI.getHistory(coinID));
 
@@ -76,7 +80,7 @@ const Chart = () => {
             }
           },
           theme: {
-            mode: 'dark'
+            mode: isDark ? 'dark' : 'light'
           },
           
           xaxis: {
